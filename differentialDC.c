@@ -68,6 +68,7 @@ void ButtonMapping(void);
 void DEL_Set(void);
 void DisplayModeONE_STD(void);
 void DisplayModeONE_AREA(void);
+void ResetParameter(void);
 /*----------------------------------宏定义-------------------------------------*/
 extern uint32_t OUTADCValue;
 
@@ -120,7 +121,7 @@ uint8_t GetRegisterAState(uint32_t ADCValue)
 
 void differenttialDC(void)
 {
-	GetEEPROM();
+	//GetEEPROM();
 	while(1)
 	{
 //			/*正常显示*/
@@ -201,7 +202,7 @@ void DisplayMODE(void)
 		{
 				DisplayModeNo = 3;
 		}
-		else if(ModeButton.Effect == PressShort && ModeButton.PressCounter==3 &&DownButton.Status==Release)
+		else if(ModeButton.Effect == PressShort && ModeButton.PressCounter==4 &&DownButton.Status==Release)
 		{
 			DisplayModeNo = 4;
 		}
@@ -455,7 +456,7 @@ void DisplayModeONE_AREA(void)
 			/*LO display mode*/
 			else if(DisplayModeNo==1)
 			{
-				SMG_DisplayModeONE_Detect_AREA_HI(timeflag,LO,ADC_Display);
+				SMG_DisplayModeONE_Detect_AREA_LO(timeflag,LO,ADC_Display);
 				if(ModeButton.Status==Release && KeyMappingFlag==0 && KEY==ULOC)
 				{
 					/*Up Button*/
@@ -598,31 +599,10 @@ void DEL_Set(void)
 {
 		static uint8_t lastCounter;
 		uint16_t LastDEL;
-//		if(EventFlag&Blink500msFlag) 
-//		{
-//			EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-//			
-//			SMG_DisplayMenuTwo_DEL();
-//		}
-//		/*短按MODE后，进入SHOT的设置子菜单*/
-//		while(ModeButton.Effect==PressShort && ModeButton.PressCounter==4)
-//		{
-			/*显示SHOT value*/			
-//			if(UpButton.Status==Release&&DownButton.Status==Release)
-//			{
-//				if(EventFlag&Blink500msFlag) 
-//				{
-//					EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-//					/*显示SHOT,闪烁*/
-					SMG_DisplayMenuTwo_DEL_SET(DEL,0);
-//				}
-//			}
-//			else
-//			{
-//				EventFlag = EventFlag &(~Blink500msFlag);
-//				SMG_DisplayMenuTwo_DEL_SET(DEL,0);
-//			}
-			
+
+			/*显示SHOT,闪烁*/
+			SMG_DisplayMenuTwo_DEL_SET(DEL,0);
+	
 			/*Up Button*/
 			if(UpButton.PressCounter !=lastCounter && UpButton.Effect==PressShort)
 			{
@@ -684,7 +664,7 @@ void DEL_Set(void)
 			}
 			if(LastDEL!=DEL && DownButton.Status==Release && UpButton.Status==Release)
 			{
-				WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
+				//WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
 			}
 			if(DEL>=300)
 				DEL = 300;
@@ -945,30 +925,64 @@ void ButtonMapping(void)
 uint32_t ProgramRUNcounter=0;
 
 
-void GetEEPROM(void)
+//void GetEEPROM(void)
+//{
+//		uint8_t tempKEY=0;
+//		
+////		ProgramRUNcounter 		= *(__IO uint32_t*)(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS);
+////		if(ProgramRUNcounter>0)	
+////		{
+////			OUT1_Mode.DelayMode 	= *(__IO uint32_t*)(OUT1_Mode_FLASH_DATA_ADDRESS);
+////			OUT1_Mode.DelayValue 	= *(__IO uint32_t*)(OUT1_Value_FLASH_DATA_ADDRESS);
+////			CSV 									= *(__IO uint32_t*)(CSV_FLASH_DATA_ADDRESS);
+////			Threshold 						= *(__IO uint32_t*)(Threshold_FLASH_DATA_ADDRESS);
+////			DACOUT 								= *(__IO uint32_t*)(DACOUT_FLASH_DATA_ADDRESS);
+////			KEY 									= *(__IO uint32_t*)(KEY_FLASH_DATA_ADDRESS);
+////			RegisterB 						= *(__IO uint32_t*)(RegisterB_FLASH_DATA_ADDRESS);
+////			DEL 									= *(__IO uint32_t*)(DEL_FLASH_DATA_ADDRESS);
+////		}
+//	
+//		//ProgramRUNcounter++;
+//		//保存程序运行次数
+//		//WriteFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS,ProgramRUNcounter);
+
+//		DAC_SetChannel1Data(DAC_Align_12b_R,(uint16_t)DACOUT);
+//		DAC_SoftwareTriggerCmd(DAC_Channel_1,ENABLE);
+//		
+//}
+
+/*****************************
+*
+*初始化所有参数
+*
+****************************/
+void ResetParameter(void)
 {
-		uint8_t tempKEY=0;
+		OUT1_Mode.DelayMode = TOFF;
+		OUT1_Mode.DelayValue = 10;
+		CSV = 1000;
+		Threshold = 1000;
+		DACOUT = 1000;
+		KEY = ULOC;
+		RegisterB = 1;
+		DEL = 50;
 		
-		ProgramRUNcounter 		= *(__IO uint32_t*)(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS);
-		if(ProgramRUNcounter>0)	
-		{
-			OUT1_Mode.DelayMode 	= *(__IO uint32_t*)(OUT1_Mode_FLASH_DATA_ADDRESS);
-			OUT1_Mode.DelayValue 	= *(__IO uint32_t*)(OUT1_Value_FLASH_DATA_ADDRESS);
-			CSV 									= *(__IO uint32_t*)(CSV_FLASH_DATA_ADDRESS);
-			Threshold 						= *(__IO uint32_t*)(Threshold_FLASH_DATA_ADDRESS);
-			DACOUT 								= *(__IO uint32_t*)(DACOUT_FLASH_DATA_ADDRESS);
-			KEY 									= *(__IO uint32_t*)(KEY_FLASH_DATA_ADDRESS);
-			RegisterB 						= *(__IO uint32_t*)(RegisterB_FLASH_DATA_ADDRESS);
-			DEL 									= *(__IO uint32_t*)(DEL_FLASH_DATA_ADDRESS);
-		}
-	
-		ProgramRUNcounter++;
-		//保存程序运行次数
-		WriteFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS,ProgramRUNcounter);
-
+		WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+		WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+		WriteFlash(CSV_FLASH_DATA_ADDRESS,CSV);
+		WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
+		WriteFlash(DACOUT_FLASH_DATA_ADDRESS,DACOUT);
+		WriteFlash(KEY_FLASH_DATA_ADDRESS,KEY);
+		WriteFlash(RegisterB_FLASH_DATA_ADDRESS,RegisterB);
+		WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
+		
+		ModeButton.Effect=PressNOEffect;
+		ModeButton.PressTimer = 0;
+		ModeButton.PressCounter = 0;
+		SetButton.Effect=PressNOEffect;
+		SetButton.PressCounter = 0;
+		
 		DAC_SetChannel1Data(DAC_Align_12b_R,(uint16_t)DACOUT);
-		DAC_SoftwareTriggerCmd(DAC_Channel_1,ENABLE);
-		
+		DAC_SoftwareTriggerCmd(DAC_Channel_1,ENABLE);	
+
 }
-
-

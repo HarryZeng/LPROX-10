@@ -30,6 +30,7 @@ void MenuTwo_OUT1_OFFD(void);
 void MenuTwo_OUT1_ON_D(void);	
 void MenuTwo_OUT1_SHOT(void);
 
+extern uint8_t  displayModeONE_FLAG;
 void menu(void)
 {
 	static uint8_t lastCounter;
@@ -43,11 +44,44 @@ void menu(void)
 	{
 		while(((ModeButton.Status==Press&&(ModeButton.PressTimer>=ModeButton.LongTime)) || (ModeButton.Effect==PressLong)))//&&DownButton.Status==Release)
 		{
+				ModeButton.PressCounter = 0;
 				MenuOne_CounterSET();
-
-				if(ModeButton.PressCounter !=lastCounter && ModeButton.Effect==PressShort)
+				while(ModeButton.PressCounter==1)
 				{
-					ModeButton.PressCounter = 3;
+					MenuOne_CounterSET();
+				}
+
+				while(ModeButton.PressCounter==2)
+				{
+					/*DETECT*//*数码管显示*/
+					SMG_DisplayModeDETECT(displayModeONE_FLAG);
+					/*******************************/
+					/*Up Button*/
+					if(UpButton.PressCounter !=lastCounter && UpButton.Effect==PressShort)
+					{
+						lastCounter = UpButton.PressCounter;
+						UpButton.PressCounter = 0;
+						if(displayModeONE_FLAG==0)
+							displayModeONE_FLAG = 1;
+						else 
+							displayModeONE_FLAG=0;
+						//WriteFlash(RegisterB_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+					}
+
+					/*Down Button*/
+					if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
+					{
+						DownButton.PressCounter = 0;
+						if(displayModeONE_FLAG==0)
+							displayModeONE_FLAG = 1;
+						else 
+							displayModeONE_FLAG=0;
+						//WriteFlash(RegisterB_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+					}
+				}
+					
+				if(ModeButton.PressCounter==3 && ModeButton.Effect==PressShort)
+				{
 					if(OUT1_Mode.DelayMode == TOFF)
 						DispalyNo = 0;
 					else if(OUT1_Mode.DelayMode == OFFD)
@@ -57,7 +91,7 @@ void menu(void)
 					else if(OUT1_Mode.DelayMode == SHOT)
 						DispalyNo = 3;
 				}
-				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==3)
+				while(ModeButton.Effect==PressShort && ModeButton.PressCounter==2)
 				{
 						MenuTwo_OUT1_DelaySET();
 						/*再短按MODE，则退出菜单*/

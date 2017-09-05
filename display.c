@@ -359,7 +359,30 @@ void SMG_DisplayModeTHIRD(int16_t CPV_counter)
 		SMG_data_Decode_table[0][7]=data_SMG_seg_table[12];													//D8	C
 }
 
-
+/*显示模式DETECT*/
+void SMG_DisplayModeDETECT(int16_t DETECT)
+{ 
+		SMG_data_Decode_table[0][0]=data_SMG_seg_table[12];					//D1	c
+		SMG_data_Decode_table[0][1]=data_SMG_seg_table[21];					//D2	t
+		SMG_data_Decode_table[0][2]=data_SMG_seg_table[14];					//D3	e
+		SMG_data_Decode_table[0][3]=data_SMG_seg_table[13];					//D4	d
+	
+	if(DETECT)
+	{
+		SMG_data_Decode_table[0][4]=data_SMG_seg_table[10];					//D5		a
+		SMG_data_Decode_table[0][5]=data_SMG_seg_table[14];					//D6		e
+		SMG_data_Decode_table[0][6]=data_SMG_seg_table[28];					//D7		r
+		SMG_data_Decode_table[0][7]=data_SMG_seg_table[10];					//D8		a
+	}
+	else
+	{
+		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];					//D5	none
+		SMG_data_Decode_table[0][5]=data_SMG_seg_table[13];					//D6	d
+		SMG_data_Decode_table[0][6]=data_SMG_seg_table[21];					//D7	t
+		SMG_data_Decode_table[0][7]=data_SMG_seg_table[20];					//D8  s
+	}
+		
+}
 
 /*功能菜单-1*/
 void SMG_DisplayMenuOne(uint32_t CSV_counter)
@@ -753,12 +776,12 @@ void SMG_DisplayMenuTwo_DEL_SET(int16_t DEL,uint8_t BlinkONOFF)
 				SMG_data_Decode_table[0][3]=data_SMG_seg_table[(DEL/1000)%10];		//D4
 			else
 				SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
-	}
+		
 		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];						//D5	none
 		SMG_data_Decode_table[0][5]=data_SMG_seg_table[23];						//D6	L
 		SMG_data_Decode_table[0][6]=data_SMG_seg_table[14];						//D7	E
 		SMG_data_Decode_table[0][7]=data_SMG_seg_table[13];						//D8	D
-	
+	}
 }
 
 

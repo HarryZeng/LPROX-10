@@ -38,6 +38,7 @@ void GPIOA_Config(void);
 uint8_t FlashCheck(void);
 void GPIO_DEINIT_ALL(void);
 void IWDG_Config(void);
+void ProgramCheck(void);
 /*****************************************/
 ///////////////////////////////////////////////////////////////////////////////////
 /**
@@ -453,7 +454,7 @@ void TIM3_IRQHandler()
 //				{
 //					EventFlag = EventFlag | Blink100msFlag;
 //				}	
-				if(timenum>=5000)	/*5000*10us = 500,000us = 500ms*/
+				if(timenum>=30000)	/*5000*10us = 500,000us = 500ms*/
 				{
 					EventFlag = EventFlag | Blink500msFlag;
 //					EventFlag = EventFlag &(~EndDispalyFlag);
@@ -718,7 +719,7 @@ int main(void)
 		SMG_GPIO_INIT();
 		user_adc_init();
 		RCC_GetClocksFreq(&SysClock);
-		//bsp_InitI2C();
+		bsp_InitI2C();
 		DAC_OUT_Init();		
 		IO_GPIO_INIT();
 		Button_Init();
@@ -727,7 +728,13 @@ int main(void)
 		CheckFLag = FlashCheck();
 	
 		if(CheckFLag)
+		{
+			/*程序运行次数检测*/
+			//ee_WriteBytes((uint8_t*)&ProgramCounter, 90, 4);
+			ProgramCheck();
+			/*主要运行函数*/
 			differenttialDC();
+		}
 		else
 			while(1)
 			{
@@ -744,6 +751,37 @@ uint32_t FormulaCheck;
 uint32_t UIDFlashResult;
 uint16_t Fml_CRC16;
 uint8_t D[12];
+int ProgramCounter=0;
+
+void ProgramCheck(void)
+{
+	//while(ee_ReadBytes((uint8_t*)&ProgramCounter,90,4)==0);
+	ProgramCounter 		= *(__IO uint32_t*)(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS);
+	if(ProgramCounter>65535)
+		ProgramCounter = 0;
+	ProgramCounter = ProgramCounter+1;
+	WriteFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS,ProgramCounter);
+	DelaymsSet(50); 
+	if(ProgramCounter<=1)
+	{
+		ResetParameter();
+	}
+}
+
+void IWDG_Config(void)
+{
+	if(RCC_GetFlagStatus(RCC_FLAG_IWDGRST) != RESET)
+	{
+		RCC_ClearFlag();
+	}
+	
+	IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+	IWDG_SetPrescaler(IWDG_Prescaler_64);
+	IWDG_SetReload(40000/20);
+	IWDG_ReloadCounter();
+	
+	IWDG_Enable();
+}
 
 void Formula_100(uint8_t *D,uint8_t *Result)
 {
@@ -777,24 +815,9 @@ uint8_t FlashCheck(void)
 		else
 			FlashFlag =0;
 		
-		return FlashFlag;	
+		return FlashFlag;
+			
 }
-
-void IWDG_Config(void)
-{
-	if(RCC_GetFlagStatus(RCC_FLAG_IWDGRST) != RESET)
-	{
-		RCC_ClearFlag();
-	}
-	
-	IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
-	IWDG_SetPrescaler(IWDG_Prescaler_64);
-	IWDG_SetReload(40000/20);
-	IWDG_ReloadCounter();
-	
-	IWDG_Enable();
-}
-
 uint16_t Formula_CRC16(uint8_t *p,uint8_t len)
 {
 	uint8_t i;

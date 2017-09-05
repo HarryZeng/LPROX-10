@@ -299,8 +299,8 @@
 	
 #define		QD_zhengxiang		1
 #define		QD_fanxiang			0
-#define 	SMG_seg_QD  		QD_zhengxiang		
-#define 	SMG_bit_QD  		QD_zhengxiang	 
+#define 	SMG_seg_QD  		QD_zhengxiang		/*正向代表，高电有效*/
+#define 	SMG_bit_QD  		QD_zhengxiang	 	/**/
 
 #if SMG_bit_QD
 	#define SMG_data_bit1  BIT0
@@ -389,35 +389,35 @@
 	#define SMG_seg_Data_9  		0x90
 	/*字母*/
 	#define SMG_seg_Data_A	 		0x88		
-	#define SMG_seg_Data_B	 		0x83	
+	#define SMG_seg_Data_b	 		0x83	
 	#define SMG_seg_Data_C	 		0xC6	
-	#define SMG_seg_Data_D	 		0xA1	
+	#define SMG_seg_Data_d	 		0xA1	
 	#define SMG_seg_Data_E	 		0x86
-	#define SMG_seg_Data_F	 		0x8E
+	#define SMG_seg_Data_f	 		0x8E
 	#define SMG_seg_Data_H	 		0x89
 	#define SMG_seg_Data_L	 		0xC7
 	#define SMG_seg_Data_P	 		0x8C
 	#define SMG_seg_Data_U	 		0xC1
 	#define SMG_seg_Data_y	 		0x91	
 	/**/
-	#define SMG_seg_Data___     0xBF
-	#define SMG_seg_Data_o_			0xA3					
-	#define SMG_seg_Data_n_			0xAB
-	#define SMG_seg_Data_V_			0x0D
-	#define SMG_seg_Data_S_			0x12
-	#define SMG_seg_Data_t_			0x07
-	#define SMG_seg_Data_i_			0x4f
-	#define SMG_seg_Data_r_			0x4e
+	#define SMG_seg_Data__     	0xBF
+	#define SMG_seg_Data_o			0xA3					
+	#define SMG_seg_Data_n			0xAB
+	#define SMG_seg_Data_V			0x0D
+	#define SMG_seg_Data_S			0x12
+	#define SMG_seg_Data_t			0x07
+	#define SMG_seg_Data_I			0x4f
+	#define SMG_seg_Data_r			0x4e
 	
-//	/*单独某段显示*/
-//	#define SMG_seg_Data_a_	 					0xFE
-//	#define SMG_seg_Data_b_	 					0xFD	
-//	#define SMG_seg_Data_c_	 					0xFB
-//	#define SMG_seg_Data_d_	 					0xF7
-//	#define SMG_seg_Data_e_	 					0xEF
-//	#define SMG_seg_Data_f_	 					0xDF
-//	#define SMG_seg_Data_g_	 					0xBF
-//	#define SMG_seg_Data_h_	 					0x7F
+	/*单独某段显示*/
+	#define SMG_seg_Data_a_	 					0xFE
+	#define SMG_seg_Data_b_	 					0xFD	
+	#define SMG_seg_Data_c_	 					0xFB
+	#define SMG_seg_Data_d_	 					0xF7
+	#define SMG_seg_Data_e_	 					0xEF
+	#define SMG_seg_Data_f_	 					0xDF
+	#define SMG_seg_Data_g_	 					0xBF
+	#define SMG_seg_Data_h_	 					0x7F
 	/*多段显示*/
 	#define SMG_seg_Data_ab_	 				0xFC
 	#define SMG_seg_Data_abc_	 				0xF8	
@@ -473,6 +473,8 @@ void SMG_DisplayModeTWO(int16_t RegisterB);
 void SMG_DisplayModeTHIRD(int16_t CPV_counter);
 /*功能菜单-1*/
 void SMG_DisplayMenuOne(uint32_t CSV_counter);
+/*显示模式DETECT*/
+void SMG_DisplayModeDETECT(int16_t DETECT);
 /*功能菜单-2-1,TOFF*/
 void SMG_DisplayMenuTwo_TOFF(void);
 /*功能菜单-2-2,OFFD*/

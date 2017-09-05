@@ -39,7 +39,7 @@
 //#define D9_GPIO_Port 							GPIOF
 //#define D8_Pin 										GPIO_Pin_1
 //#define D8_GPIO_Port 							GPIOF
-
+/*DD61 Port*/
 #define D5_Pin 										GPIO_Pin_10
 #define D5_GPIO_Port 							GPIOA
 #define D6_Pin 										GPIO_Pin_11
@@ -73,6 +73,39 @@
 #define C_Pin 										GPIO_Pin_1
 #define C_GPIO_Port 							GPIOF
 
+/*LPROX10*/
+//#define D5_Pin 										GPIO_Pin_13
+//#define D5_GPIO_Port 							GPIOC
+//#define D6_Pin 										GPIO_Pin_14
+//#define D6_GPIO_Port 							GPIOC
+//#define D7_Pin 										GPIO_Pin_15
+//#define D7_GPIO_Port 							GPIOC
+//#define D9_Pin 										GPIO_Pin_0
+//#define D9_GPIO_Port 							GPIOD
+//#define D8_Pin 										GPIO_Pin_1
+//#define D8_GPIO_Port 							GPIOD
+//#define D_Pin 										GPIO_Pin_9
+//#define D_GPIO_Port 							GPIOB
+//#define B_Pin 										GPIO_Pin_8
+//#define B_GPIO_Port 							GPIOB
+//#define E_Pin 										GPIO_Pin_7
+//#define E_GPIO_Port 							GPIOB
+//#define A_Pin 										GPIO_Pin_6
+//#define A_GPIO_Port 							GPIOB
+//#define F_Pin 										GPIO_Pin_5
+//#define F_GPIO_Port 							GPIOB
+//#define G_Pin 										GPIO_Pin_4
+//#define G_GPIO_Port 							GPIOB
+//#define D4_Pin 										GPIO_Pin_10
+//#define D4_GPIO_Port 							GPIOA
+//#define D3_Pin 										GPIO_Pin_11
+//#define D3_GPIO_Port 							GPIOA
+//#define D2_Pin 										GPIO_Pin_12
+//#define D2_GPIO_Port 							GPIOA
+//#define D1_Pin 										GPIO_Pin_15
+//#define D1_GPIO_Port 							GPIOA
+//#define C_Pin 										GPIO_Pin_3
+//#define C_GPIO_Port 							GPIOB
 
 #define ADCIN_Pin 								GPIO_Pin_2
 #define ADCIN_GPIO_Port 					GPIOA
@@ -136,10 +169,11 @@ extern uint32_t 	ShortCircuitCounter;
 void differenttialDC(void);	 
 void GetADCValue(uint32_t *meanValue);
 void GetEEPROM(void);
- void Test_Delay(uint32_t ms);
+void Test_Delay(uint32_t ms);
 void SetOUT1Status(void);
 void SetOUT2Status(void);
 void WriteFlash(uint32_t addr,uint32_t data);
+void ResetParameter(void);
 	#ifdef __cplusplus
 	}
 	#endif
