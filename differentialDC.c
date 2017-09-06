@@ -121,7 +121,7 @@ uint8_t GetRegisterAState(uint32_t ADCValue)
 
 void differenttialDC(void)
 {
-	//GetEEPROM();
+	GetEEPROM();
 	while(1)
 	{
 //			/*正常显示*/
@@ -445,7 +445,7 @@ void DisplayModeONE_AREA(void)
 					}
 					if(LastHIValue!=HI && DownButton.Status==Release && UpButton.Status==Release)
 					{
-						//WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
+						WriteFlash(HI_FLASH_DATA_ADDRESS,HI);
 					}
 				}
 				if(HI>=4000)
@@ -521,7 +521,7 @@ void DisplayModeONE_AREA(void)
 					}
 					if(LastLOValue!=LO && DownButton.Status==Release && UpButton.Status==Release)
 					{
-						//WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
+						WriteFlash(LO_FLASH_DATA_ADDRESS,LO);
 					}
 				}
 				if(LO>=4000)
@@ -578,6 +578,9 @@ void DisplayModeTHIRD(void)
 {
 		/*数码管显示*/
 		SMG_DisplayModeTHIRD(CPV);
+		/*以下为清楚按键计数，防止会影响到显示模式4*/
+		DownButton.PressCounter = 0;
+		UpButton.PressCounter = 0;
 }
 
 /*******************************
@@ -604,6 +607,7 @@ void DEL_Set(void)
 			SMG_DisplayMenuTwo_DEL_SET(DEL,0);
 	
 			/*Up Button*/
+			LastDEL = DEL;
 			if(UpButton.PressCounter !=lastCounter && UpButton.Effect==PressShort)
 			{
 				lastCounter = UpButton.PressCounter;
@@ -664,7 +668,7 @@ void DEL_Set(void)
 			}
 			if(LastDEL!=DEL && DownButton.Status==Release && UpButton.Status==Release)
 			{
-				//WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
+				WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
 			}
 			if(DEL>=300)
 				DEL = 300;
@@ -925,31 +929,30 @@ void ButtonMapping(void)
 uint32_t ProgramRUNcounter=0;
 
 
-//void GetEEPROM(void)
-//{
-//		uint8_t tempKEY=0;
-//		
-////		ProgramRUNcounter 		= *(__IO uint32_t*)(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS);
-////		if(ProgramRUNcounter>0)	
-////		{
-////			OUT1_Mode.DelayMode 	= *(__IO uint32_t*)(OUT1_Mode_FLASH_DATA_ADDRESS);
-////			OUT1_Mode.DelayValue 	= *(__IO uint32_t*)(OUT1_Value_FLASH_DATA_ADDRESS);
-////			CSV 									= *(__IO uint32_t*)(CSV_FLASH_DATA_ADDRESS);
-////			Threshold 						= *(__IO uint32_t*)(Threshold_FLASH_DATA_ADDRESS);
-////			DACOUT 								= *(__IO uint32_t*)(DACOUT_FLASH_DATA_ADDRESS);
-////			KEY 									= *(__IO uint32_t*)(KEY_FLASH_DATA_ADDRESS);
-////			RegisterB 						= *(__IO uint32_t*)(RegisterB_FLASH_DATA_ADDRESS);
-////			DEL 									= *(__IO uint32_t*)(DEL_FLASH_DATA_ADDRESS);
-////		}
-//	
-//		//ProgramRUNcounter++;
-//		//保存程序运行次数
-//		//WriteFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS,ProgramRUNcounter);
+void GetEEPROM(void)
+{
+		uint8_t tempKEY=0;
+		
+			//OUT1_Mode.DelayMode 	= *(__IO uint32_t*)(OUT1_Mode_FLASH_DATA_ADDRESS);
+			OUT1_Mode.DelayValue 	= *(__IO uint32_t*)(OUT1_Value_FLASH_DATA_ADDRESS);
+			CSV 									= *(__IO uint32_t*)(CSV_FLASH_DATA_ADDRESS);
+			Threshold 						= *(__IO uint32_t*)(Threshold_FLASH_DATA_ADDRESS);
+			DACOUT 								= *(__IO uint32_t*)(DACOUT_FLASH_DATA_ADDRESS);
+			KEY 									= *(__IO uint32_t*)(KEY_FLASH_DATA_ADDRESS);
+			RegisterB 						= *(__IO uint32_t*)(RegisterB_FLASH_DATA_ADDRESS);
+			DEL 									= *(__IO uint32_t*)(DEL_FLASH_DATA_ADDRESS);
+			HI 										= *(__IO uint32_t*)(HI_FLASH_DATA_ADDRESS);
+			LO 										= *(__IO uint32_t*)(LO_FLASH_DATA_ADDRESS);
+			displayModeONE_FLAG 	= *(__IO uint32_t*)(DETECT_FLASH_DATA_ADDRESS);
+
+		//ProgramRUNcounter++;
+		//保存程序运行次数
+		//WriteFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS,ProgramRUNcounter);
 
 //		DAC_SetChannel1Data(DAC_Align_12b_R,(uint16_t)DACOUT);
 //		DAC_SoftwareTriggerCmd(DAC_Channel_1,ENABLE);
-//		
-//}
+		
+}
 
 /*****************************
 *
@@ -968,13 +971,26 @@ void ResetParameter(void)
 		DEL = 50;
 		
 		WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS,OUT1_Mode.DelayMode);
+		Test_Delay(50); 
 		WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS,OUT1_Mode.DelayValue);
+		Test_Delay(50); 
 		WriteFlash(CSV_FLASH_DATA_ADDRESS,CSV);
+		Test_Delay(50); 
 		WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
+		Test_Delay(50); 
 		WriteFlash(DACOUT_FLASH_DATA_ADDRESS,DACOUT);
+		Test_Delay(50); 
 		WriteFlash(KEY_FLASH_DATA_ADDRESS,KEY);
+		Test_Delay(50); 
 		WriteFlash(RegisterB_FLASH_DATA_ADDRESS,RegisterB);
+		Test_Delay(50); 
 		WriteFlash(DEL_FLASH_DATA_ADDRESS,DEL);
+		Test_Delay(50); 
+		WriteFlash(HI_FLASH_DATA_ADDRESS,HI);
+		Test_Delay(50); 
+		WriteFlash(LO_FLASH_DATA_ADDRESS,LO);
+		Test_Delay(50); 
+		WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
 		
 		ModeButton.Effect=PressNOEffect;
 		ModeButton.PressTimer = 0;

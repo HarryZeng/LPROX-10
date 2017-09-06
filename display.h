@@ -361,7 +361,7 @@
 	#define SMG_seg_Data_f			0x4e	//20170715
 	#define SMG_seg_Data_t			0x47  //20170715
 	#define SMG_seg_Data_L			0x07	//20170715
-	#define SMG_seg_Data_I			0x39	//20170715
+	#define SMG_seg_Data_I			0x0b  //20170905  //0x39	//20170715  
 	#define SMG_seg_Data_r			0x0e	//20170715
 
 	/*µ¥¶ÀÄ³¶ÎÏÔÊ¾*/

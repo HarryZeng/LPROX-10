@@ -65,7 +65,7 @@ void menu(void)
 							displayModeONE_FLAG = 1;
 						else 
 							displayModeONE_FLAG=0;
-						//WriteFlash(RegisterB_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+						WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
 					}
 
 					/*Down Button*/
@@ -76,7 +76,7 @@ void menu(void)
 							displayModeONE_FLAG = 1;
 						else 
 							displayModeONE_FLAG=0;
-						//WriteFlash(RegisterB_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+						WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
 					}
 				}
 					

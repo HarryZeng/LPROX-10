@@ -362,24 +362,24 @@ void SMG_DisplayModeTHIRD(int16_t CPV_counter)
 /*显示模式DETECT*/
 void SMG_DisplayModeDETECT(int16_t DETECT)
 { 
-		SMG_data_Decode_table[0][0]=data_SMG_seg_table[12];					//D1	c
-		SMG_data_Decode_table[0][1]=data_SMG_seg_table[21];					//D2	t
-		SMG_data_Decode_table[0][2]=data_SMG_seg_table[14];					//D3	e
-		SMG_data_Decode_table[0][3]=data_SMG_seg_table[13];					//D4	d
+		SMG_data_Decode_table[0][4]=data_SMG_seg_table[12];					//D1	c
+		SMG_data_Decode_table[0][5]=data_SMG_seg_table[21];					//D2	t
+		SMG_data_Decode_table[0][6]=data_SMG_seg_table[14];					//D3	e
+		SMG_data_Decode_table[0][7]=data_SMG_seg_table[13];					//D4	d
 	
 	if(DETECT)
 	{
-		SMG_data_Decode_table[0][4]=data_SMG_seg_table[10];					//D5		a
-		SMG_data_Decode_table[0][5]=data_SMG_seg_table[14];					//D6		e
-		SMG_data_Decode_table[0][6]=data_SMG_seg_table[28];					//D7		r
-		SMG_data_Decode_table[0][7]=data_SMG_seg_table[10];					//D8		a
+		SMG_data_Decode_table[0][0]=data_SMG_seg_table[10];					//D5		a
+		SMG_data_Decode_table[0][1]=data_SMG_seg_table[14];					//D6		e
+		SMG_data_Decode_table[0][2]=data_SMG_seg_table[28];					//D7		r
+		SMG_data_Decode_table[0][3]=data_SMG_seg_table[10];					//D8		a
 	}
 	else
 	{
-		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];					//D5	none
-		SMG_data_Decode_table[0][5]=data_SMG_seg_table[13];					//D6	d
-		SMG_data_Decode_table[0][6]=data_SMG_seg_table[21];					//D7	t
-		SMG_data_Decode_table[0][7]=data_SMG_seg_table[20];					//D8  s
+		SMG_data_Decode_table[0][0]=data_SMG_seg_table[22];					//D5	none
+		SMG_data_Decode_table[0][1]=data_SMG_seg_table[13];					//D6	d
+		SMG_data_Decode_table[0][2]=data_SMG_seg_table[21];					//D7	t
+		SMG_data_Decode_table[0][3]=data_SMG_seg_table[20];					//D8  s
 	}
 		
 }
@@ -1108,15 +1108,18 @@ void send_bit_RP1(int32_t RP1_data)
 //}
 
 
-
 void SMG_Diplay(void)
 {
 		SMG_Data.SMG_seg=SMG_data_Decode_table[0][SMG_BIT];
 		SMG_Data.SMG_bit=data_SMG_bit_table[SMG_BIT];				//位片选，填充数据
+//	
 	
-		/*失能，消隐处理*/
- 		send_seg_RP0(SMG_seg_Data_dark);
- 		send_bit_RP1(SMG_Data.SMG_bit);
+//		SMG_Data.SMG_seg=SMG_seg_Data_7;
+//		SMG_Data.SMG_bit=SMG_data_bit1;				//位片选，填充数据
+	
+//		/*失能，消隐处理*/
+// 		send_seg_RP0(SMG_seg_Data_dark);
+// 		send_bit_RP1(SMG_Data.SMG_bit);
 		/*使能，并显示*/
 		send_seg_RP0(SMG_Data.SMG_seg);
 		send_bit_RP1(SMG_Data.SMG_bit);

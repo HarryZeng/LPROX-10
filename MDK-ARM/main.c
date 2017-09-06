@@ -135,7 +135,7 @@ void adc_config()
     ADC_Init(ADC1, &adc_init_structure);  
 		
     ADC_OverrunModeCmd(ADC1, ENABLE);                               //????????  
-    ADC_ChannelConfig(ADC1, ADC_Channel_2, ADC_SampleTime_28_5Cycles);               //??????,????125nS  
+    ADC_ChannelConfig(ADC1, ADC_Channel_3, ADC_SampleTime_28_5Cycles);               //??????,????125nS  
     ADC_GetCalibrationFactor(ADC1);                                 //?????ADC  
     ADC_Cmd(ADC1, ENABLE);                                          //??ADC1  
     while(ADC_GetFlagStatus(ADC1, ADC_FLAG_ADEN) == RESET);         //??ADC1????  
@@ -256,7 +256,7 @@ void adc_timer_init()
     TIM_TimeBaseStructInit(&timer_init_structure);                  //初始化TIM结构体  
   
     timer_init_structure.TIM_CounterMode = TIM_CounterMode_Up;      //向上计数模式  
-    timer_init_structure.TIM_Period = 10;                          //每300 uS触发一次中断,??ADC  
+    timer_init_structure.TIM_Period = 50;                          //每300 uS触发一次中断,??ADC  
     timer_init_structure.TIM_Prescaler = 47;                      //计数时钟分频,f=1M,systick=1 uS  
     timer_init_structure.TIM_RepetitionCounter = 0;              //发生0+1的update事件产生中断 
 		
@@ -264,9 +264,8 @@ void adc_timer_init()
   
 		timer_OCinit_structure.TIM_OCMode = TIM_OCMode_PWM1;
 		timer_OCinit_structure.TIM_OutputState = TIM_OutputState_Enable;
-		timer_OCinit_structure.TIM_Pulse = 10;
+		timer_OCinit_structure.TIM_Pulse = 2;
 		timer_OCinit_structure.TIM_OCPolarity = TIM_OCPolarity_High;
-		
 		
 		TIM_OC2Init(TIM2,&timer_OCinit_structure);
 		TIM_OC2PreloadConfig(TIM2,TIM_OCPreload_Enable);
@@ -531,8 +530,7 @@ void DMA1_Channel1_IRQHandler()
 
 void SMG_GPIO_INIT(void)
 {
-	
-	   GPIO_InitTypeDef gpio_init_structure;  
+ GPIO_InitTypeDef gpio_init_structure;  
     //??GPIO??  
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE); 
 		RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);  
@@ -544,31 +542,36 @@ void SMG_GPIO_INIT(void)
     GPIO_StructInit(&gpio_init_structure);  
 	
 			//GPIOD3
-    gpio_init_structure.GPIO_Pin = D3_Pin;  
+    gpio_init_structure.GPIO_Pin = GPIO_Pin_10;  
     gpio_init_structure.GPIO_Mode = GPIO_Mode_OUT;                  
     gpio_init_structure.GPIO_OType = GPIO_OType_PP;                
-    gpio_init_structure.GPIO_Speed = GPIO_Speed_2MHz;              
+    gpio_init_structure.GPIO_Speed = GPIO_Speed_50MHz;              
     gpio_init_structure.GPIO_PuPd= GPIO_PuPd_UP;                    
-		GPIO_Init(D3_GPIO_Port, &gpio_init_structure);  
+		GPIO_Init(GPIOA, &gpio_init_structure);  
 
 		//GPIOD2~4
-    gpio_init_structure.GPIO_Pin = D4_Pin|D3_Pin|D2_Pin|D1_Pin;  
+    gpio_init_structure.GPIO_Pin = D4_Pin;  
     gpio_init_structure.GPIO_Mode = GPIO_Mode_OUT;                  
     gpio_init_structure.GPIO_OType = GPIO_OType_PP;                
     gpio_init_structure.GPIO_Speed = GPIO_Speed_2MHz;              
     gpio_init_structure.GPIO_PuPd= GPIO_PuPd_UP;                    
-    GPIO_Init(D4_GPIO_Port, &gpio_init_structure);  
+    GPIO_Init(D4_GPIO_Port, &gpio_init_structure); 
+		gpio_init_structure.GPIO_Pin = D3_Pin;
 		GPIO_Init(D3_GPIO_Port, &gpio_init_structure);  
+		gpio_init_structure.GPIO_Pin = D2_Pin;
 		GPIO_Init(D2_GPIO_Port, &gpio_init_structure); 
+		gpio_init_structure.GPIO_Pin = D1_Pin;
 		GPIO_Init(D1_GPIO_Port, &gpio_init_structure); 
 	  //GPIOD5~7                                                       
-    gpio_init_structure.GPIO_Pin = D5_Pin|D6_Pin|D7_Pin;  
+    gpio_init_structure.GPIO_Pin = D5_Pin;  
     gpio_init_structure.GPIO_Mode = GPIO_Mode_OUT;                   
     gpio_init_structure.GPIO_OType = GPIO_OType_PP;                
     gpio_init_structure.GPIO_Speed = GPIO_Speed_2MHz;             
     gpio_init_structure.GPIO_PuPd= GPIO_PuPd_UP;                  
-    GPIO_Init(D5_GPIO_Port, &gpio_init_structure);  
+    GPIO_Init(D5_GPIO_Port, &gpio_init_structure); 
+		gpio_init_structure.GPIO_Pin = D6_Pin;  		
 		GPIO_Init(D6_GPIO_Port, &gpio_init_structure);  
+		gpio_init_structure.GPIO_Pin = D7_Pin;  
 		GPIO_Init(D7_GPIO_Port, &gpio_init_structure);  
 		//GPIOA                                                        
     gpio_init_structure.GPIO_Pin = D8_Pin|D9_Pin;  
@@ -577,39 +580,47 @@ void SMG_GPIO_INIT(void)
     gpio_init_structure.GPIO_Speed = GPIO_Speed_2MHz;              
     gpio_init_structure.GPIO_PuPd= GPIO_PuPd_UP;                    
     GPIO_Init(D8_GPIO_Port, &gpio_init_structure);  
+		gpio_init_structure.GPIO_Pin = D9_Pin;  
 		GPIO_Init(D9_GPIO_Port, &gpio_init_structure);  
 
 		//GPIOB
-	  gpio_init_structure.GPIO_Pin = A_Pin|B_Pin|C_Pin|D_Pin|E_Pin|F_Pin|G_Pin;  
+	  gpio_init_structure.GPIO_Pin = A_Pin;  
     gpio_init_structure.GPIO_Mode = GPIO_Mode_OUT;                  
     gpio_init_structure.GPIO_OType = GPIO_OType_PP;                 
     gpio_init_structure.GPIO_Speed = GPIO_Speed_2MHz;              
     gpio_init_structure.GPIO_PuPd= GPIO_PuPd_DOWN; 
 		GPIO_Init(A_GPIO_Port, &gpio_init_structure);
+		gpio_init_structure.GPIO_Pin = B_Pin; 
 		GPIO_Init(B_GPIO_Port, &gpio_init_structure);
+		gpio_init_structure.GPIO_Pin = C_Pin; 
 		GPIO_Init(C_GPIO_Port, &gpio_init_structure);
+		gpio_init_structure.GPIO_Pin = D_Pin; 
 		GPIO_Init(D_GPIO_Port, &gpio_init_structure);
+		gpio_init_structure.GPIO_Pin = E_Pin; 
 		GPIO_Init(E_GPIO_Port, &gpio_init_structure);
+		gpio_init_structure.GPIO_Pin = F_Pin; 
 		GPIO_Init(F_GPIO_Port, &gpio_init_structure);
+		gpio_init_structure.GPIO_Pin = G_Pin; 
 		GPIO_Init(G_GPIO_Port, &gpio_init_structure); 
 		
-		GPIO_WriteBit(D1_GPIO_Port, D1_Pin, Bit_RESET);
-		GPIO_WriteBit(D2_GPIO_Port, D2_Pin, Bit_RESET);
-		GPIO_WriteBit(D3_GPIO_Port, D3_Pin, Bit_RESET);
-		GPIO_WriteBit(D4_GPIO_Port, D4_Pin, Bit_RESET);
-		GPIO_WriteBit(D5_GPIO_Port, D5_Pin, Bit_RESET);
-		GPIO_WriteBit(D6_GPIO_Port, D6_Pin, Bit_RESET);
-		GPIO_WriteBit(D7_GPIO_Port, D7_Pin, Bit_RESET);
-		GPIO_WriteBit(D8_GPIO_Port, D8_Pin, Bit_RESET);
-		GPIO_WriteBit(D9_GPIO_Port, D9_Pin, Bit_RESET);
+		
+		GPIO_WriteBit(D1_GPIO_Port, D1_Pin, Bit_SET);
+		GPIO_WriteBit(D2_GPIO_Port, D2_Pin, Bit_SET);
+		GPIO_WriteBit(D3_GPIO_Port, D3_Pin, Bit_SET);
+		GPIO_WriteBit(D4_GPIO_Port, D4_Pin, Bit_SET);
+		GPIO_WriteBit(D5_GPIO_Port, D5_Pin, Bit_SET);
+		GPIO_WriteBit(D6_GPIO_Port, D6_Pin, Bit_SET);
+		GPIO_WriteBit(D7_GPIO_Port, D7_Pin, Bit_SET);
+		GPIO_WriteBit(D8_GPIO_Port, D8_Pin, Bit_SET);
+		GPIO_WriteBit(D9_GPIO_Port, D9_Pin, Bit_SET);
 
-		GPIO_WriteBit(A_GPIO_Port, A_Pin, Bit_RESET);
-		GPIO_WriteBit(B_GPIO_Port, B_Pin, Bit_RESET);
-		GPIO_WriteBit(C_GPIO_Port, C_Pin, Bit_RESET);
-		GPIO_WriteBit(D_GPIO_Port, D_Pin, Bit_RESET);
-		GPIO_WriteBit(E_GPIO_Port, E_Pin, Bit_RESET);
-		GPIO_WriteBit(F_GPIO_Port, F_Pin, Bit_RESET);
-		GPIO_WriteBit(G_GPIO_Port, G_Pin, Bit_RESET);
+		GPIO_WriteBit(A_GPIO_Port, A_Pin, Bit_SET);
+		GPIO_WriteBit(B_GPIO_Port, B_Pin, Bit_SET);
+		GPIO_WriteBit(C_GPIO_Port, C_Pin, Bit_SET);
+		GPIO_WriteBit(D_GPIO_Port, D_Pin, Bit_SET);
+		GPIO_WriteBit(E_GPIO_Port, E_Pin, Bit_SET);
+		GPIO_WriteBit(F_GPIO_Port, F_Pin, Bit_SET);
+		GPIO_WriteBit(G_GPIO_Port, G_Pin, Bit_SET);
 
 }
 
@@ -719,8 +730,8 @@ int main(void)
 		SMG_GPIO_INIT();
 		user_adc_init();
 		RCC_GetClocksFreq(&SysClock);
-		bsp_InitI2C();
-		DAC_OUT_Init();		
+	//	bsp_InitI2C();
+	//	DAC_OUT_Init();		
 		IO_GPIO_INIT();
 		Button_Init();
 		DelaymsSet(500); 
@@ -730,7 +741,6 @@ int main(void)
 		if(CheckFLag)
 		{
 			/*程序运行次数检测*/
-			//ee_WriteBytes((uint8_t*)&ProgramCounter, 90, 4);
 			ProgramCheck();
 			/*主要运行函数*/
 			differenttialDC();
@@ -755,9 +765,8 @@ int ProgramCounter=0;
 
 void ProgramCheck(void)
 {
-	//while(ee_ReadBytes((uint8_t*)&ProgramCounter,90,4)==0);
 	ProgramCounter 		= *(__IO uint32_t*)(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS);
-	if(ProgramCounter>65535)
+	if(ProgramCounter>65535 || ProgramCounter<0)
 		ProgramCounter = 0;
 	ProgramCounter = ProgramCounter+1;
 	WriteFlash(ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS,ProgramCounter);

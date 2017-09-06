@@ -7,28 +7,73 @@
 #include  "stm32f0xx.h"
 
 /* Private define ------------------------------------------------------------*/
-//#define D4_Pin 										GPIO_Pin_10
-//#define D4_GPIO_Port 							GPIOA
-//#define D3_Pin 										GPIO_Pin_11
-//#define D3_GPIO_Port 							GPIOA
-//#define D2_Pin 										GPIO_Pin_12
-//#define D2_GPIO_Port 							GPIOA
-//#define D1_Pin 										GPIO_Pin_15
-//#define D1_GPIO_Port 							GPIOA
-//#define C_Pin 										GPIO_Pin_3
-//#define C_GPIO_Port 							GPIOB
-//#define G_Pin 										GPIO_Pin_4
-//#define G_GPIO_Port 							GPIOB
-//#define F_Pin 										GPIO_Pin_5
-//#define F_GPIO_Port 							GPIOB
-//#define A_Pin 										GPIO_Pin_6
-//#define A_GPIO_Port 							GPIOB
-//#define E_Pin 										GPIO_Pin_7
-//#define E_GPIO_Port 							GPIOB
-//#define B_Pin 										GPIO_Pin_8
-//#define B_GPIO_Port 							GPIOB
-//#define D_Pin 										GPIO_Pin_9
+#define D4_Pin 										GPIO_Pin_10
+#define D4_GPIO_Port 							GPIOA
+#define D3_Pin 										GPIO_Pin_11
+#define D3_GPIO_Port 							GPIOA
+#define D2_Pin 										GPIO_Pin_12
+#define D2_GPIO_Port 							GPIOA
+#define D1_Pin 										GPIO_Pin_15
+#define D1_GPIO_Port 							GPIOA
+#define C_Pin 										GPIO_Pin_3
+#define C_GPIO_Port 							GPIOB
+#define G_Pin 										GPIO_Pin_4
+#define G_GPIO_Port 							GPIOB
+#define F_Pin 										GPIO_Pin_5
+#define F_GPIO_Port 							GPIOB
+#define A_Pin 										GPIO_Pin_6
+#define A_GPIO_Port 							GPIOB
+#define E_Pin 										GPIO_Pin_7
+#define E_GPIO_Port 							GPIOB
+#define B_Pin 										GPIO_Pin_8
+#define B_GPIO_Port 							GPIOB
+#define D_Pin 										GPIO_Pin_9
+#define D_GPIO_Port 							GPIOB
+#define D5_Pin 										GPIO_Pin_13
+#define D5_GPIO_Port 							GPIOC
+#define D6_Pin 										GPIO_Pin_14
+#define D6_GPIO_Port 							GPIOC
+#define D7_Pin 										GPIO_Pin_15
+#define D7_GPIO_Port 							GPIOC
+#define D9_Pin 										GPIO_Pin_0
+#define D9_GPIO_Port 							GPIOF
+#define D8_Pin 										GPIO_Pin_1
+#define D8_GPIO_Port 							GPIOF
+/*DD61 Port*/
+//#define D5_Pin 										GPIO_Pin_10
+//#define D5_GPIO_Port 							GPIOA
+//#define D6_Pin 										GPIO_Pin_11
+//#define D6_GPIO_Port 							GPIOA
+//#define D7_Pin 										GPIO_Pin_12
+//#define D7_GPIO_Port 							GPIOA
+//#define D9_Pin 										GPIO_Pin_15
+//#define D9_GPIO_Port 							GPIOA
+//#define D8_Pin 										GPIO_Pin_3
+//#define D8_GPIO_Port 							GPIOB
+//#define D_Pin 										GPIO_Pin_4
 //#define D_GPIO_Port 							GPIOB
+//#define B_Pin 										GPIO_Pin_5
+//#define B_GPIO_Port 							GPIOB
+//#define E_Pin 										GPIO_Pin_6
+//#define E_GPIO_Port 							GPIOB
+//#define A_Pin 										GPIO_Pin_7
+//#define A_GPIO_Port 							GPIOB
+//#define F_Pin 										GPIO_Pin_8
+//#define F_GPIO_Port 							GPIOB
+//#define G_Pin 										GPIO_Pin_9
+//#define G_GPIO_Port 							GPIOB
+//#define D4_Pin 										GPIO_Pin_13
+//#define D4_GPIO_Port 							GPIOC
+//#define D3_Pin 										GPIO_Pin_14
+//#define D3_GPIO_Port 							GPIOC
+//#define D2_Pin 										GPIO_Pin_15
+//#define D2_GPIO_Port 							GPIOC
+//#define D1_Pin 										GPIO_Pin_0
+//#define D1_GPIO_Port 							GPIOF
+//#define C_Pin 										GPIO_Pin_1
+//#define C_GPIO_Port 							GPIOF
+
+/*LPROX10*/
 //#define D5_Pin 										GPIO_Pin_13
 //#define D5_GPIO_Port 							GPIOC
 //#define D6_Pin 										GPIO_Pin_14
@@ -39,51 +84,6 @@
 //#define D9_GPIO_Port 							GPIOF
 //#define D8_Pin 										GPIO_Pin_1
 //#define D8_GPIO_Port 							GPIOF
-/*DD61 Port*/
-#define D5_Pin 										GPIO_Pin_10
-#define D5_GPIO_Port 							GPIOA
-#define D6_Pin 										GPIO_Pin_11
-#define D6_GPIO_Port 							GPIOA
-#define D7_Pin 										GPIO_Pin_12
-#define D7_GPIO_Port 							GPIOA
-#define D9_Pin 										GPIO_Pin_15
-#define D9_GPIO_Port 							GPIOA
-#define D8_Pin 										GPIO_Pin_3
-#define D8_GPIO_Port 							GPIOB
-#define D_Pin 										GPIO_Pin_4
-#define D_GPIO_Port 							GPIOB
-#define B_Pin 										GPIO_Pin_5
-#define B_GPIO_Port 							GPIOB
-#define E_Pin 										GPIO_Pin_6
-#define E_GPIO_Port 							GPIOB
-#define A_Pin 										GPIO_Pin_7
-#define A_GPIO_Port 							GPIOB
-#define F_Pin 										GPIO_Pin_8
-#define F_GPIO_Port 							GPIOB
-#define G_Pin 										GPIO_Pin_9
-#define G_GPIO_Port 							GPIOB
-#define D4_Pin 										GPIO_Pin_13
-#define D4_GPIO_Port 							GPIOC
-#define D3_Pin 										GPIO_Pin_14
-#define D3_GPIO_Port 							GPIOC
-#define D2_Pin 										GPIO_Pin_15
-#define D2_GPIO_Port 							GPIOC
-#define D1_Pin 										GPIO_Pin_0
-#define D1_GPIO_Port 							GPIOF
-#define C_Pin 										GPIO_Pin_1
-#define C_GPIO_Port 							GPIOF
-
-/*LPROX10*/
-//#define D5_Pin 										GPIO_Pin_13
-//#define D5_GPIO_Port 							GPIOC
-//#define D6_Pin 										GPIO_Pin_14
-//#define D6_GPIO_Port 							GPIOC
-//#define D7_Pin 										GPIO_Pin_15
-//#define D7_GPIO_Port 							GPIOC
-//#define D9_Pin 										GPIO_Pin_0
-//#define D9_GPIO_Port 							GPIOD
-//#define D8_Pin 										GPIO_Pin_1
-//#define D8_GPIO_Port 							GPIOD
 //#define D_Pin 										GPIO_Pin_9
 //#define D_GPIO_Port 							GPIOB
 //#define B_Pin 										GPIO_Pin_8
@@ -107,7 +107,7 @@
 //#define C_Pin 										GPIO_Pin_3
 //#define C_GPIO_Port 							GPIOB
 
-#define ADCIN_Pin 								GPIO_Pin_2
+#define ADCIN_Pin 								GPIO_Pin_3
 #define ADCIN_GPIO_Port 					GPIOA
 #define DACOUT_Pin 								GPIO_Pin_4
 #define DACOUT_GPIO_Port 					GPIOA
@@ -115,7 +115,7 @@
 #define SDA_GPIO_Port 						GPIOA
 #define SCL_Pin 									GPIO_Pin_7
 #define SCL_GPIO_Port 						GPIOA
-#define BUTTON_SET_Pin 						GPIO_Pin_10
+#define BUTTON_SET_Pin 						GPIO_Pin_1 /**在LPROX10中，取消了这个按键*/
 #define BUTTON_SET_GPIO_Port 			GPIOB
 #define SC_Pin 										GPIO_Pin_11
 #define SC_GPIO_Port 							GPIOB
@@ -140,17 +140,20 @@
 #define EndDispalyFlag   	0x40
 	 
 	 
-#define 	FLASH_Base_ADDRESS															0x08007000
+#define 	FLASH_Base_ADDRESS															0x08005000
 
-#define 	ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS 	 		FLASH_Base_ADDRESS+0
-#define 	OUT1_Mode_FLASH_DATA_ADDRESS 	 									FLASH_Base_ADDRESS+10
-#define 	OUT1_Value_FLASH_DATA_ADDRESS 	 								FLASH_Base_ADDRESS+20
-#define 	CSV_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+30
-#define 	Threshold_FLASH_DATA_ADDRESS 	 									FLASH_Base_ADDRESS+40
-#define 	DACOUT_FLASH_DATA_ADDRESS 	 										FLASH_Base_ADDRESS+50
-#define 	KEY_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+60
-#define 	RegisterB_FLASH_DATA_ADDRESS 	 									FLASH_Base_ADDRESS+70
-#define 	DEL_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+80
+#define 	ProgramRUNcounter_Mode_FLASH_DATA_ADDRESS 	 		FLASH_Base_ADDRESS+0x000
+#define 	OUT1_Mode_FLASH_DATA_ADDRESS 	 									FLASH_Base_ADDRESS+0x400
+#define 	OUT1_Value_FLASH_DATA_ADDRESS 	 								FLASH_Base_ADDRESS+0x800
+#define 	CSV_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+0xC00
+#define 	Threshold_FLASH_DATA_ADDRESS 	 									FLASH_Base_ADDRESS+0x1000
+#define 	DACOUT_FLASH_DATA_ADDRESS 	 										FLASH_Base_ADDRESS+0x1400
+#define 	KEY_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+0x1800
+#define 	RegisterB_FLASH_DATA_ADDRESS 	 									FLASH_Base_ADDRESS+0x1c00
+#define 	DEL_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+0x2000
+#define 	HI_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+0x2400
+#define 	LO_FLASH_DATA_ADDRESS 	 												FLASH_Base_ADDRESS+0x2800
+#define 	DETECT_FLASH_DATA_ADDRESS 	 										FLASH_Base_ADDRESS+0x2C00	 
 	 
 typedef enum
 {
