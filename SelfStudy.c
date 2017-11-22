@@ -17,7 +17,7 @@
 #include "differentialDC.h"
 #include "key.h"
 #include "SelfStudy.h"
-//#include "arm_math.h"
+#include "flash.h"
 #include "display.h"
 #include "bsp_eeprom_24xx.h"
 

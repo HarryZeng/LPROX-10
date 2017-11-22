@@ -18,6 +18,7 @@
 #include "key.h"
 #include "display.h"
 #include "bsp_eeprom_24xx.h"
+#include "flash.h"
 
 int32_t CSV = 1000;
 OUT1_DELAY_MODE_STRUCT OUT1_Mode={TOFF,10};

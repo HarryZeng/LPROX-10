@@ -20,6 +20,7 @@
 #include "SelfStudy.h"
 #include "menu.h"
 #include "bsp_eeprom_24xx.h"
+#include "flash.h"
 
 /*DSP库宏定义：ARM_MATH_CM0*/
 
@@ -88,18 +89,7 @@ void GetADCValue(uint32_t *meanValue)
 	*meanValue = OUTADCValue;
 }
 
-/******
-写内部FLASH
-*****/
-void WriteFlash(uint32_t addr,uint32_t data)
-{	
-	FLASH_Unlock(); //解锁FLASH编程擦除控制器
-	FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|FLASH_FLAG_PGERR|FLASH_FLAG_WRPERR);//清除标志位
-	FLASH_ErasePage(addr); //擦除指定地址页
-	FLASH_ProgramWord(addr,data); //从指定页的0地址开始写
-	FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|FLASH_FLAG_PGERR|FLASH_FLAG_WRPERR);//清除标志位
-	FLASH_Lock(); //锁定FLASH编程擦除控制器
-}
+
 /*计算OUT1*/
 /********************
 *

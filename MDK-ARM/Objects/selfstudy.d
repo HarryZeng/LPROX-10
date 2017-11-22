@@ -35,6 +35,7 @@
 .\objects\selfstudy.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\selfstudy.o: ..\SelfStudy.h
 .\objects\selfstudy.o: ..\main.h
+.\objects\selfstudy.o: ..\flash.h
 .\objects\selfstudy.o: ..\display.h
 .\objects\selfstudy.o: ..\bsp_eeprom_24xx.h
 .\objects\selfstudy.o: ..\bsp_i2c_gpio.h

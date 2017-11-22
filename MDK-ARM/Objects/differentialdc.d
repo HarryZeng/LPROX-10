@@ -39,3 +39,4 @@
 .\objects\differentialdc.o: ..\menu.h
 .\objects\differentialdc.o: ..\bsp_eeprom_24xx.h
 .\objects\differentialdc.o: ..\bsp_i2c_gpio.h
+.\objects\differentialdc.o: ..\flash.h

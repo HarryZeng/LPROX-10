@@ -38,3 +38,4 @@
 .\objects\menu.o: ..\display.h
 .\objects\menu.o: ..\bsp_eeprom_24xx.h
 .\objects\menu.o: ..\bsp_i2c_gpio.h
+.\objects\menu.o: ..\flash.h

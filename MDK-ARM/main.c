@@ -5,6 +5,7 @@
 #include "display.h"
 #include "bsp_eeprom_24xx.h"
 #include "menu.h"
+#include "flash.h"
 
 
 #define DMA_BUFFER_SIZE     1  
@@ -216,24 +217,24 @@ void adc_timer_init()
 	
 		GPIO_PinAFConfig(GPIOA,GPIO_PinSource1,GPIO_AF_2);
 //	
-//    nvic_init_structure.NVIC_IRQChannel = TIM1_BRK_UP_TRG_COM_IRQn;                //使能TIM1中断通道  
-//    nvic_init_structure.NVIC_IRQChannelCmd = ENABLE;                //使能TIM1中断  
-//    nvic_init_structure.NVIC_IRQChannelPriority = 2;                //优先级为0  
-//		
-//    NVIC_Init(&nvic_init_structure);  
+    nvic_init_structure.NVIC_IRQChannel = TIM1_BRK_UP_TRG_COM_IRQn;                //使能TIM1中断通道  
+    nvic_init_structure.NVIC_IRQChannelCmd = ENABLE;                //使能TIM1中断  
+    nvic_init_structure.NVIC_IRQChannelPriority = 0;                //优先级为0  
+		
+    NVIC_Init(&nvic_init_structure);  
 		
 		//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
 		//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 		nvic_init_structure.NVIC_IRQChannel = TIM2_IRQn;                //使能TIM2中断通道  
     nvic_init_structure.NVIC_IRQChannelCmd = ENABLE;                //使能TIM2中断  
-    nvic_init_structure.NVIC_IRQChannelPriority = 0;                //优先级为0  
+    nvic_init_structure.NVIC_IRQChannelPriority = 1;                //优先级为0  
 		
     NVIC_Init(&nvic_init_structure); 
 		
-		
+
 		nvic_init_structure.NVIC_IRQChannel = TIM3_IRQn;                //使能TIM3中断通道  
     nvic_init_structure.NVIC_IRQChannelCmd = ENABLE;                //使能TIM3中断  
-    nvic_init_structure.NVIC_IRQChannelPriority = 1;                //优先级为4
+    nvic_init_structure.NVIC_IRQChannelPriority = 3;                //优先级为4
 		
     NVIC_Init(&nvic_init_structure); 
 
@@ -256,7 +257,7 @@ void adc_timer_init()
     TIM_TimeBaseStructInit(&timer_init_structure);                  //初始化TIM结构体  
   
     timer_init_structure.TIM_CounterMode = TIM_CounterMode_Up;      //向上计数模式  
-    timer_init_structure.TIM_Period = 50;                          //每300 uS触发一次中断,??ADC  
+    timer_init_structure.TIM_Period = 10;                          //每300 uS触发一次中断,??ADC  
     timer_init_structure.TIM_Prescaler = 47;                      //计数时钟分频,f=1M,systick=1 uS  
     timer_init_structure.TIM_RepetitionCounter = 0;              //发生0+1的update事件产生中断 
 		
@@ -264,7 +265,7 @@ void adc_timer_init()
   
 		timer_OCinit_structure.TIM_OCMode = TIM_OCMode_PWM1;
 		timer_OCinit_structure.TIM_OutputState = TIM_OutputState_Enable;
-		timer_OCinit_structure.TIM_Pulse = 2;
+		timer_OCinit_structure.TIM_Pulse = 0;
 		timer_OCinit_structure.TIM_OCPolarity = TIM_OCPolarity_High;
 		
 		TIM_OC2Init(TIM2,&timer_OCinit_structure);
@@ -279,7 +280,7 @@ void adc_timer_init()
 
 		TIM_Cmd(TIM2, ENABLE);
 
-
+		/*TIM1*/
 /* TIM1 ??? ---------------------------------------------------
    TIM1 ????(TIM1CLK) ??? APB2 ?? (PCLK2)    
     => TIM1CLK = PCLK2 = SystemCoreClock
@@ -300,28 +301,27 @@ void adc_timer_init()
   //TimerPeriod = (SystemCoreClock / DEF_PWMFRE ) - 1;
   //TimerPeriod = (SystemCoreClock / DEF_PWMFRE);
   /* TIM1 ???? */
-  
-  
+    
   /* Time ??????*/
-//  timer_init_structure.TIM_Prescaler = 47;
-//  timer_init_structure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time ????????????*/
-//  timer_init_structure.TIM_Period = 25;
-//  timer_init_structure.TIM_RepetitionCounter = 0;
+  timer_init_structure.TIM_Prescaler = 47;
+  timer_init_structure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time ????????????*/
+  timer_init_structure.TIM_Period = 25;
+  timer_init_structure.TIM_RepetitionCounter = 0;
 
-//  TIM_TimeBaseInit(TIM1, &timer_init_structure);
+  TIM_TimeBaseInit(TIM1, &timer_init_structure);
 
-//  /* ??1,2,3,4?PWM ???? */
-//  timer_OCinit_structure.TIM_OCMode = TIM_OCMode_PWM1;
-//  timer_OCinit_structure.TIM_OutputState = TIM_OutputState_Enable ;//TIM_OutputState_Enable; //PWM?????
-//  timer_OCinit_structure.TIM_OutputNState = TIM_OutputNState_Disable ;//TIM_OutputNState_Enable; //??PWM?????
-//  timer_OCinit_structure.TIM_OCPolarity = TIM_OCPolarity_High;  //PWM 1?????
-//  timer_OCinit_structure.TIM_OCNPolarity = TIM_OCNPolarity_Low; //PWM?? 0?????
-//  timer_OCinit_structure.TIM_OCIdleState = TIM_OCIdleState_Set;
-//  timer_OCinit_structure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
+  /* ??1,2,3,4?PWM ???? */
+  timer_OCinit_structure.TIM_OCMode = TIM_OCMode_PWM1;
+  timer_OCinit_structure.TIM_OutputState = TIM_OutputState_Enable ;//TIM_OutputState_Enable; //PWM?????
+  timer_OCinit_structure.TIM_OutputNState = TIM_OutputNState_Disable ;//TIM_OutputNState_Enable; //??PWM?????
+  timer_OCinit_structure.TIM_OCPolarity = TIM_OCPolarity_High;  //PWM 1?????
+  timer_OCinit_structure.TIM_OCNPolarity = TIM_OCNPolarity_Low; //PWM?? 0?????
+  timer_OCinit_structure.TIM_OCIdleState = TIM_OCIdleState_Set;
+  timer_OCinit_structure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
 
-//  timer_OCinit_structure.TIM_Pulse = 3; //?????
-//  TIM_OC1Init(TIM1, &timer_OCinit_structure);//????1??
-//	TIM_OC1PreloadConfig(TIM1,TIM_OCPreload_Enable);
+  timer_OCinit_structure.TIM_Pulse = 3; //?????
+  TIM_OC1Init(TIM1, &timer_OCinit_structure);//????1??
+	TIM_OC1PreloadConfig(TIM1,TIM_OCPreload_Enable);
 //	
 //	timer_OCinit_structure.TIM_Pulse = 3; //?????
 //  TIM_OC2Init(TIM1, &timer_OCinit_structure);//????1??
@@ -331,20 +331,22 @@ void adc_timer_init()
 //  TIM_OC3Init(TIM1, &timer_OCinit_structure);//????1??
 //	TIM_OC3PreloadConfig(TIM1,TIM_OCPreload_Enable);
 
-//  TIM_ITConfig(TIM1, TIM_IT_Update, ENABLE);                      //使能TIM1中断
-//	TIM_ARRPreloadConfig(TIM1,ENABLE);
-//	
-//  /* TIM1 ?????*/
-//	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Enable);							//选择TIM1的timer为触发源  
-//	//TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_OC1Ref);							//选择TIM1的timer为触发源  
-//	//TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_OC2Ref);							//选择TIM1的timer为触发源  
-//	//TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_OC3Ref);							//选择TIM1的timer为触发源  
-//	TIM_ClearITPendingBit(TIM1, TIM_IT_Update);     //清除update事件中断标志
-//	TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);//主从模式MSM  
-//	TIM_CtrlPWMOutputs(TIM1, ENABLE);
-//	//TIM_SelectOnePulseMode(TIM1,TIM_OPMode_Single);
-//	
-//  TIM_Cmd(TIM1, ENABLE);
+	TIM_ClearFlag(TIM1, TIM_FLAG_Update);//?????? 
+  TIM_ITConfig(TIM1, TIM_IT_Update, ENABLE);                      //使能TIM1中断
+	TIM_ARRPreloadConfig(TIM1,ENABLE);
+	
+  /* TIM1 ?????*/
+	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Enable);							//选择TIM1的timer为触发源  
+	//TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_OC1Ref);							//选择TIM1的timer为触发源  
+	//TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_OC2Ref);							//选择TIM1的timer为触发源  
+	//TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_OC3Ref);							//选择TIM1的timer为触发源  
+	
+	TIM_ClearITPendingBit(TIM1, TIM_IT_Update);     //清除update事件中断标志
+	//TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);//主从模式MSM  
+	TIM_CtrlPWMOutputs(TIM1, ENABLE);
+	//TIM_SelectOnePulseMode(TIM1,TIM_OPMode_Single);
+	
+  TIM_Cmd(TIM1, ENABLE);
 //	
   /* TIM1 ????? */
   
@@ -394,6 +396,7 @@ void TIM2_IRQHandler()
 {
     if(TIM_GetITStatus(TIM2, TIM_FLAG_Update))            //判断发生update事件中断  
     {  
+			
         TIM_ClearITPendingBit(TIM2, TIM_FLAG_Update);     //清除update事件中断标志
     }  
 }  
@@ -402,7 +405,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler()
 {  
     if(TIM_GetITStatus(TIM1, TIM_FLAG_Update))            //判断发生update事件中断  
     {
-
+			
       TIM_ClearITPendingBit(TIM1, TIM_FLAG_Update);     //清除update事件中断标志
     }  
 } 
@@ -491,9 +494,11 @@ void DMA1_Channel1_IRQHandler()
 				ADC_ROW_Value[DMA_GetADC_Counter] = adc_dma_tab[0];
 				//OUTSumADCValue += adc_dma_tab[0];
 				DMA_GetADC_Counter++;
-				
+				_Gpio_7_set;
+				TIM_SetCompare2(TIM2,0);
 				if(DMA_GetADC_Counter>3)
 				{
+					TIM_SetCompare2(TIM2,2);
 					DMA_GetADC_Counter=0;
 					OUTADCValue = 4095 - func(ADC_ROW_Value);/*去除最大，最小值，求得的平均值*/
 					//OUTADCValue= OUTSumADCValue/4;
@@ -505,7 +510,7 @@ void DMA1_Channel1_IRQHandler()
 						RegisterA = 0;
 					
 					OUT1_Mode.DelayCounter++;
-
+					
 					/*设置OUT1的状态*/
 					SetOUT1Status();
 					
@@ -522,9 +527,10 @@ void DMA1_Channel1_IRQHandler()
 					/*显示OUT1和OUT2的状态*/
 					SMG_DisplayOUT_STATUS(OUT1,OUT2);
 					LastRegisterA = RegisterA;
+					//TIM_SetCompare2(TIM2,0);
 				}
+				DMA_ClearITPendingBit(DMA_IT_TC);                   //清楚DMA中断标志位  
     }  
-    DMA_ClearITPendingBit(DMA_IT_TC);                   //清楚DMA中断标志位  
 }  
 
 
@@ -540,6 +546,14 @@ void SMG_GPIO_INIT(void)
 		RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOF, ENABLE);  
 	
     GPIO_StructInit(&gpio_init_structure);  
+	
+				//GPIOA7
+    gpio_init_structure.GPIO_Pin = GPIO_Pin_7;  
+    gpio_init_structure.GPIO_Mode = GPIO_Mode_OUT;                  
+    gpio_init_structure.GPIO_OType = GPIO_OType_PP;                
+    gpio_init_structure.GPIO_Speed = GPIO_Speed_50MHz;              
+    gpio_init_structure.GPIO_PuPd= GPIO_PuPd_UP;                    
+		GPIO_Init(GPIOA, &gpio_init_structure); 
 	
 			//GPIOD3
     gpio_init_structure.GPIO_Pin = GPIO_Pin_10;  

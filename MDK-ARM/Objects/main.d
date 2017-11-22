@@ -39,3 +39,4 @@
 .\objects\main.o: ..\..\LPROX-10\bsp_eeprom_24xx.h
 .\objects\main.o: ..\..\LPROX-10\bsp_i2c_gpio.h
 .\objects\main.o: ..\..\LPROX-10\menu.h
+.\objects\main.o: ..\..\LPROX-10\flash.h
